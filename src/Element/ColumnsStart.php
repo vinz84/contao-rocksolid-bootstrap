@@ -78,10 +78,14 @@ class ColumnsStart extends \ContentElement
 	 */
 	public static function getColumnsConfiguration(array $data)
 	{
+		// print_r($data['rs_columns_small']);
+		// print_r($data['rs_columns_medium']);
+		// print_r($data['rs_columns_large']);
+
 		$config = array();
 		$lastColumns = null;
 
-		foreach (array('large', 'medium', 'small') as $media) {
+		foreach (array('col-lg', 'col-md', 'col') as $media) {
 
 			$columns = isset($data['rs_columns_' . $media])
 				? $data['rs_columns_' . $media]
@@ -104,7 +108,28 @@ class ColumnsStart extends \ContentElement
 			});
 			$classes = array();
 			foreach ($columns as $key => $column) {
-				$classes[] = array('-' . $media . '-col-' . $columnsTotal . '-' . $column);
+				// $classes[] = array('-' . $media . '-col-' . $columnsTotal . '-' . $column);
+				$tmpSize = '';
+				switch ($media) {
+					case 'col-lg':
+						$tmpSize = 12/$data['rs_columns_large'];
+						break;
+					case 'col-md':
+						$tmpSize = 12/$data['rs_columns_medium'];
+						break;
+					case 'col':
+						$tmpSize = 12/$data['rs_columns_small'];
+						break;
+
+					default:
+						// code...
+						break;
+				}
+
+				$classes[] = array($media . '-' . $tmpSize);
+
+
+				// echo "Total:" . $columnsTotal . " key:" . $key . ' col:' . $column . "<br>";
 			}
 			$classes[0][] = '-' . $media . '-first';
 			$classes[count($classes) - 1][] = '-' . $media . '-last';
